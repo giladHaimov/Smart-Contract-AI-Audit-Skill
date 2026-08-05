@@ -1,0 +1,10 @@
+# macOS Finder junk
+.DS_Store
+**/.DS_Store
+
+# editor swap/backup files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
