@@ -52,3 +52,34 @@ For KB (compiler-bug) findings, also state the pinned version and the entry's `i
 - Severity in the database is sometimes a range (`Critical/High`, `Medium/Low`) — pick the concrete severity for the instance found, don't just copy the range into the report.
 - An entry with `(see also V-NNN in Part I)` in Part II, or an entry that's an alias-merge of multiple sources, is still ONE finding if it's the same root cause in the code — don't double-report E-02 and V-001 for the same unguarded external call.
 - If the codebase is large, it's fine to checkpoint: report findings for the categories walked so far rather than holding everything until all 293 are done.
+
+## Progress logging (required for multi-contract / corpus runs)
+
+Emit short, structured progress lines so batch runs are debuggable and resumable. Prefer these exact prefixes:
+
+```
+[audit] scope: N .sol files | solc: <pragma or "mixed">
+[audit] category start: <CategoryName> (Part I/II/III)
+[audit] category done: <CategoryName> | findings_so_far: K
+[audit] finding: <ID> <Severity> <function or file:line>
+[audit] skip: <ID or Category> | reason: <one line>
+[audit] file done: <path> | critical: C high: H medium: M low: L
+[audit] complete: files=N findings=K duration_hint=<optional>
+```
+
+Rules:
+- Log **category start/done** even when zero findings (proves the walk happened).
+- Log **every finding** at decision time, not only in the final report.
+- On false-positive candidates you considered and rejected, prefer a one-line `[audit] skip:` with reason over silence.
+- For corpus jobs (many contracts), one `[audit] file done:` line per contract is the minimum operational signal.
+- Do not spam token-level traces; keep logs one line each.
+
+## Model-strength note (from 2026-08 evaluation)
+
+When running this skill at scale:
+
+- **Weaker / faster models** tend to over-report (high recall, high noise — e.g. systematic V-187 hits). Treat their Critical/High output as a **candidate set**.
+- **Stronger models** on that filtered set drop most noise and retain a smaller, higher-precision residue.
+- Always keep a **human pass** on surviving Critical/High items before treating them as confirmed.
+
+See `../evaluation/` and the [Medium write-up](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe).
