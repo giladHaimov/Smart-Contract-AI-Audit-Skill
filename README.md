@@ -17,8 +17,9 @@ modes/
   AUDIT_MODE.md                             the audit workflow + the report template
   CODING_MODE.md                            routes into 21 category checklists depending on what you're writing
   coding/<category>.md                      21 of these, Don't/Do per entry, text lifted straight from the DB
-test-contracts/                             7 real contracts I used to sanity-check this actually works
-test-contracts-audit/                       what the audits of those 7 contracts came back with
+test-contracts/                             7 real contracts used for early sanity checks
+test-contracts-audit/                       audit outputs for those 7 contracts
+evaluation/                                 large-corpus results (weak / strong / traps) + Medium link
 ```
 
 Nothing fancy. It's markdown and a set of instructions for reading the markdown in a sensible order. The database is the part that matters; the file structure is just there so an agent doesn't have to swallow the whole thing every time it wants to check one thing.
@@ -104,6 +105,28 @@ I didn't want to just trust my own design here, so I fetched seven real contract
 The raw counts aren't really the interesting part. What I actually cared about: the two most battle-tested production files (current OpenZeppelin ERC20, canonical WETH9) came back with zero Critical or High findings — not because it went easy on them, that's genuinely the state of that code, and it says so instead of inventing findings to look busy. All three intentionally-broken contracts had their real bug caught with the right line numbers, including a walkthrough of the storage-collision bug in Ethernaut's "Delegation" level that actually explains the mechanism for that specific code (both contracts happen to store `owner` at slot 0, so a delegatecall-executed write from one lands in the other) rather than reciting the general concept. And the one production contract that came back Critical, MasterChef, is flagged for something that's really there.
 
 I checked that last part myself, by hand — read the actual source, matched every line number and quoted snippet the reports cited against it. All of it checked out, including a code comment quoted verbatim (`// XXX DO NOT add the same LP token more than once`) that had no business being right unless the report writer actually opened the file.
+
+## Large-corpus evaluation (2026-08)
+
+Beyond the original 7 sanity-check contracts, this skill was run on a much larger set:
+
+- **~219 production contracts** (Weak pass: Composer 2.5)
+- **36 filtered contracts** with Weak Critical/High findings (Strong pass: Opus 5 High + Grok 4.6 High)
+- **12 trap contracts** with planted bugs and no filename hints
+
+**Headline results**
+
+- Weak: **327** findings; heavy noise (one FP pattern alone hit **30.3%** of the corpus)
+- Strong on the filtered 36: **23** findings; **58%** of contracts cleaned to zero; only **1/4** Weak Criticals stayed Critical
+- Human review of 6 Critical/High survivors: **2 confirmed · 2 qualified · 2 rejected**
+- Traps: **11/12** planted issue groups caught under Weak pass
+
+**Takeaway:** Weak models are scouts. Strong models are the usable review layer for this skill. Keep a human on the Critical/High residue.
+
+Full numbers, method, and limits:
+
+- [evaluation/](evaluation/) — summaries for weak-pass, strong-pass, and traps
+- [Medium write-up](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
 
 ## Where this falls short, because it does
 

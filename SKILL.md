@@ -47,3 +47,8 @@ modes/
 `Smart-contract-vulnerability-database_v1.md` is the single source of truth and is never edited by either mode — only read. Everything else in this skill (`reference/INDEX.md`, `modes/coding/*.md`) is a **derived view**: INDEX.md is the same 293 rows with only the descriptive prose stripped out (title/severity/category/line survive); the per-category coding checklists reuse each entry's Description and Detection text verbatim, just relabeled Don't/Do, and link back to the exact line (`Smart-contract-vulnerability-database_v1.md:<line>`) for Aliases and Sources. If a derived file and the main database ever disagree, the main database wins — treat that as a bug in the derived file, not a reason to trust the summary.
 
 Entry IDs (`V-`, `E-`, `KB-`) are stable identifiers — use them in audit findings and commit/PR references so they're traceable back to this database.
+
+## Evaluation
+
+Large-corpus results (weak vs strong models, trap contracts) live in `evaluation/`.
+Measured write-up: https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe
