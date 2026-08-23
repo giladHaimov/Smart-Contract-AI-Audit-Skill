@@ -6,6 +6,10 @@ Short version: it's a Solidity vulnerability database — 293 known bug classes,
 
 I want to be upfront about something: this is not a linter, and I didn't try to make it one. Slither already does the mechanical pattern-matching well, and honestly the skill tells you to go run Slither in a bunch of places. What this is for is the stuff that isn't mechanically detectable — a reward function that's fine by itself but wrong the moment an admin calls a specific setter, an oracle read that's totally reasonable on mainnet but falls apart the second you're bridging across chains. That kind of thing needs someone (or something) to actually read the function, not just grep for `.call`.
 
+## Design and evaluation
+
+- [Design and prevention workflow: AI-Assisted Solidity Development](https://medium.com/@giladha/ai-assisted-solidity-development-bringing-audit-knowledge-into-the-dev-loop-a2089eae0212)
+- [Large-corpus evaluation: Stress-testing the auditor on ~230 contracts](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
 ## What's in the folder
 
 ```
