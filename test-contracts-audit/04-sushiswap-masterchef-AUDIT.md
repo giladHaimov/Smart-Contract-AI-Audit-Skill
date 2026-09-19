@@ -1,7 +1,9 @@
 # Audit Report — 04-sushiswap-masterchef.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/04-sushiswap-masterchef.sol`
-(sushiswap/masterchef, real production `MasterChef` LP-staking / SUSHI-emission distributor, `pragma solidity 0.6.12`, 297 lines, single contract `MasterChef is Ownable`, `using SafeMath for uint256`, `using SafeERC20 for IERC20`)
+**Scope:** `test-contracts/04-sushiswap-masterchef.sol`
+(sushiswap/masterchef, real production `MasterChef` LP-staking / SUSHI-emission distributor, `pragma solidity 0.6.12`, 296 lines, single contract `MasterChef is Ownable`, `using SafeMath for uint256`, `using SafeERC20 for IERC20`)
+
+**Not in scope / unverifiable:** the file imports six sources not present in this repo checkout — five OpenZeppelin contracts (`IERC20`, `SafeERC20`, `EnumerableSet`, `SafeMath`, `Ownable`) and `./SushiToken.sol`. Anything depending on their internals (e.g. `SafeMath`'s revert behavior, `Ownable`'s ownership-transfer logic, `SushiToken`'s mint/transfer semantics) is treated as unverifiable rather than assumed safe or unsafe; where the report reasons about them (e.g. the `safeSushiTransfer` finding), it does so from the well-known upstream implementations, stated as an assumption.
 
 **Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening the full entry for any candidate match before writing a finding. Particular attention was paid to Accounting & Fees and DeFi Mechanics per the audit brief (reward-per-share accrual ordering, duplicate/misconfigured pool entries, owner/admin privilege scope over pool funds and the SUSHI mint rate, missing access control on admin-only functions).
 
@@ -14,8 +16,8 @@
 | Critical | 1 |
 | High | 3 |
 | Medium | 3 |
-| Low | 4 |
-| **Total** | **11** |
+| Low | 3 |
+| **Total** | **10** |
 
 Scope: single file, `contract MasterChef`, `pragma solidity 0.6.12` (pinned, not floating). The contract holds LP tokens for an arbitrary number of owner-added pools and mints SUSHI on every `updatePool()` call. The headline finding is a Checks-Effects-Interactions violation present in `deposit`, `withdraw`, and — most severely — `emergencyWithdraw` (V-001), where the external token transfer precedes the user-balance state reset. Close behind are two DeFi-Mechanics-category findings the brief specifically asked about: `add()` has no duplicate-pool guard (V-079, the contract's own comment literally warns "XXX DO NOT add the same LP token more than once" without enforcing it in code), and the owner has essentially unchecked custodial power over every pool's LP tokens via `setMigrator`/`migrate` (V-019). The remainder are accounting-precision, DoS, and hygiene items.
 
@@ -142,14 +144,14 @@ user.amount = user.amount.add(received);
 
 ---
 
-### [V-129] Unchecked ERC20 Return Value — Low
+### [V-065] Non-Standard ERC20 Return Values — Low
 
 **Location:** `04-sushiswap-masterchef.sol:283-290`, `safeSushiTransfer`
 
 **Issue:** `safeSushiTransfer()` calls `sushi.transfer(_to, sushiBal)` / `sushi.transfer(_to, _amount)` directly on the `IERC20`-typed `sushi` variable (lines 286 and 288) instead of using the `SafeERC20.safeTransfer` wrapper already `using`-imported and used everywhere else in the file for `pool.lpToken`. The returned `bool` is discarded. In practice `SushiToken` is the project's own OpenZeppelin-based token and is expected to always return `true` or revert, so exploitability here is low, but the pattern is inconsistent with the rest of the contract's defensive style, and `deposit`/`withdraw` still emit their `Deposit`/`Withdraw` events regardless of whether the SUSHI payout inside `safeSushiTransfer` actually succeeded — so a silent `false` return (e.g. under a future token upgrade or if `sushi` is ever reconfigured to a non-standard token) would be indistinguishable on-chain from a successful reward payout.
 
-**Reference:** V-129 — Smart-contract-vulnerability-database_v1.md:1075
-**External refs:** Solodit https://solodit.cyfrin.io ; SWC-104 https://swcregistry.io/docs/SWC-104
+**Reference:** V-065 — Smart-contract-vulnerability-database_v1.md:551
+**External refs:** Solodit "Non-Standard ERC20 Return Value (USDT-style)" https://solodit.cyfrin.io ; DeFiVulnLabs DVL-25/DVL-26 https://github.com/SunWeb3Sec/DeFiVulnLabs
 
 **Suggested fix:** Replace both calls with `sushi.safeTransfer(_to, sushiBal)` / `sushi.safeTransfer(_to, _amount)` using the same `SafeERC20` library already in scope, for consistency and so a failed transfer reverts instead of silently succeeding.
 
@@ -194,7 +196,7 @@ Whole categories/sub-ranges were not applicable and are noted rather than force-
 - **Token Standards beyond V-063 (V-064..V-077):** no rebasing-token-specific logic to break (would degrade the same way as V-063's fee-on-transfer case, already captured); no NFTs, no `permit`.
 - **DeFi Mechanics beyond V-079 (V-078, V-080..V-083):** V-078 (rewards lost before first staker) does not apply — `updatePool()` correctly fast-forwards `lastRewardBlock` without minting when `lpSupply == 0` (lines 216-219), so no reward is minted-then-stranded; no lending/liquidation logic in this contract.
 - **Proxy & Upgradeability (V-084..V-093):** not a proxy; no `delegatecall`, no `initializer`, plain constructor.
-- **DoS beyond V-094 (V-095..V-105):** no push-payment patterns to arbitrary untrusted receivers beyond the two SUSHI/LP transfer helpers already covered under V-001/V-129; no user-facing unbounded array beyond `poolInfo` (owner-only growth, covered under V-094).
+- **DoS beyond V-094 (V-095..V-105):** no push-payment patterns to arbitrary untrusted receivers beyond the two SUSHI/LP transfer helpers already covered under V-001/V-065; no user-facing unbounded array beyond `poolInfo` (owner-only growth, covered under V-094).
 - **MEV & Front-running (V-106..V-118):** no swaps, no slippage-sensitive execution, no auctions/Merkle claims; `block.number`-based scheduling only (no `block.timestamp` manipulation surface).
 - **Signature & Replay (V-119..V-128):** no signature verification anywhere in the file.
 - **External Calls beyond V-129 (V-130..V-138):** `migrate()`'s `migrator.migrate(lpToken)` call is to an owner-set address, not user input, so V-131 (arbitrary call from user input) doesn't fit — captured instead as a centralization/trust issue under V-019; no `delegatecall` anywhere (rules out V-132/E-22).

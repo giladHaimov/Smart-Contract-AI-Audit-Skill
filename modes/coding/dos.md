@@ -73,3 +73,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Deprecated/historical: attacker built a 1024-deep call stack so the victim's sub-call automatically failed. Neutralized by EIP-150.
 - **Do / Detection:** Not exploitable post-EIP-150; relevant only insofar as unchecked call returns (V-129) would have masked such failures.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:877`
+

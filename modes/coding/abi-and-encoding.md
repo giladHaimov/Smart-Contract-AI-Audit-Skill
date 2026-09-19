@@ -59,7 +59,7 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 
 ### KB-23: MissingEscapingInFormatting — introduced 0.5.14, fixed 0.6.8 — Low
 - **Don't:** String literals containing double backslashes passed directly to external/encoding calls were mis-encoded under ABIEncoderV2.
-- **Do / Detection:** Check solc >= 0.6.8; flag literals with `\\\\` used directly in external call arguments.
+- **Do / Detection:** Check solc >= 0.6.8; flag literals with `\\` used directly in external call arguments.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2055`
 
 ### KB-24: ArraySliceDynamicallyEncodedBaseType — introduced 0.6.0, fixed 0.6.8 — Low
@@ -126,3 +126,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Higher-order bits of short `bytesNN` types were not cleaned before comparison.
 - **Do / Detection:** Check solc >= 0.3.3; legacy only.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2225`
+

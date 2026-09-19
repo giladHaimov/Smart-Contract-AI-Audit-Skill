@@ -2,7 +2,7 @@
 
 Measured runs of this skill against a large production corpus and deliberately trapped contracts.
 
-**Write-up:** [What Happened When We Stress-Tested an AI Solidity Auditor on ~230 Contracts](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
+**Write-up:** [What Happened When We Stress-Tested an AI Solidity Auditor on ~220 Contracts](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
 
 ## Pipeline
 

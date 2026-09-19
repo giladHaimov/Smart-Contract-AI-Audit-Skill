@@ -61,3 +61,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Permit2-style signature transfers or batched permits can be replayed/phished if nonce management, deadline, or spender binding is wrong — draining all tokens a user has permitted to Permit2.
 - **Do / Detection:** Permit-consuming contracts: unordered nonce bitmap usage, `sigDeadline` enforcement, `transferFrom` spending exactly the permitted amount/owner; flag contracts requesting blanket Permit2 approvals.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:1065`
+

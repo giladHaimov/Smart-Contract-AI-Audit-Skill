@@ -85,3 +85,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Fees taken on both deposit and withdrawal from the same cached amount, fee-on-fee compounding errors, or per-operation rounding that drifts the sum of user balances away from total holdings, causing last-withdrawer shortfalls. Related: aggregate vs per-user computation paths diverging (dust bricks final withdrawals).
 - **Do / Detection:** Invariant: sum(user claims) + fees <= contract balance at all times; test many small operations and measure drift; compare loop-accumulated vs directly-computed totals; fee computed once on a clearly defined base (gross vs net); treasury sweep can't touch user principal.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:525`
+

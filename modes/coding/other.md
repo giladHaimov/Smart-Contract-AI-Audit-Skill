@@ -73,3 +73,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Take compiler warnings seriously; restrict the amount of Ether held; keep contracts small/modular; use Checks-Effects-Interactions; include a fail-safe mode; ask for peer review; use the latest compiler.
 - **Do / Detection:** Check compilation has zero warnings, solc is current, an emergency pause/fail-safe exists, and value-at-risk is bounded.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:1731`
+

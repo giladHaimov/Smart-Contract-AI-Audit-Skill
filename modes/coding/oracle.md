@@ -67,3 +67,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Protocols that accept LP tokens as collateral and price them from the pool's own spot reserves are circularly manipulable: inflate reserves → LP "worth" more → borrow against fake value.
 - **Do / Detection:** LP valuation must use fair-pricing formulas (e.g., Alpha Homora fair LP price = 2*sqrt(p0*p1), supply-adjusted) or independent oracles for both underlyings; red flag: `lpPrice = reserveIn * price / lpSupply` with spot reserves.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:313`
+

@@ -25,3 +25,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Bridge receivers that don't validate source chain selector, sender address, or router accept forged cross-chain messages; bridges trusting user-supplied token addresses let attackers register a worthless token mapping to a canonical wrapped asset and withdraw real reserves (Qubit). Wrong gas estimation or blocking-mode design also bricks delivery.
 - **Do / Detection:** `_ccipReceive`/`_lzReceive` allowlist checks for sourceChain+sender+router; trace how `token` params map to canonical assets (whitelist vs user input); verify deposit event/payload authenticity; zero-amount/zero-address deposit edge cases; failure handling after execution windows.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:1539`
+

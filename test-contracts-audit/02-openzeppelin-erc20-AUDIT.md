@@ -1,7 +1,9 @@
 # Audit Report — 02-openzeppelin-erc20.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/02-openzeppelin-erc20.sol`
+**Scope:** `test-contracts/02-openzeppelin-erc20.sol`
 (OpenZeppelin Contracts, `token/ERC20/ERC20.sol`, "last updated v5.5.0", MIT license, `pragma solidity ^0.8.20`)
+
+**Not in scope / unverifiable:** the file's four import statements — `./IERC20.sol`, `./extensions/IERC20Metadata.sol`, `../../utils/Context.sol`, `../../interfaces/draft-IERC6093.sol` — are present, but their target files are not in this repo checkout. Anything depending on their internals (e.g. `Context._msgSender()` behavior, custom-error definitions) is treated as unverifiable rather than assumed safe or unsafe.
 
 **Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening full entries for any candidate match. This is the canonical, heavily-audited OpenZeppelin ERC20 reference implementation; the low finding count reflects the actual state of the code, not a truncated pass.
 
@@ -17,7 +19,7 @@
 | Low | 1 |
 | **Total** | **1** |
 
-Scope: single file, 306 lines, no external calls, no ETH handling, no assembly, no proxy/upgrade pattern. One low-severity, standard-ERC20-limitation finding (V-070).
+Scope: single file, 305 lines, no external calls, no ETH handling, no assembly, no proxy/upgrade pattern. One low-severity, standard-ERC20-limitation finding (V-070).
 
 ---
 
@@ -51,7 +53,7 @@ Whole categories were not applicable to this specific file and are noted rather 
 - **Signature & Replay (V-119..V-128), External Calls (V-129..V-138, most of Part II's External-Calls-tagged entries):** no signature verification and no low-level/external calls anywhere in this file.
 - **Storage (V-139..V-150, most Part II storage entries):** no inline assembly, no manual storage-slot manipulation, no uninitialized pointers.
 - **Cross-Chain & Multichain (V-183..V-186):** single-chain, no bridge/message-passing code.
-- **Part III (KB-01..KB-59):** version-gated by `introduced..fixed` against the floating pragma `^0.8.20` (effective range `>=0.8.20 <0.9.0`). Three entries' version windows fall inside that floating range — KB-01 (0.8.29–0.8.36), KB-02 (0.7.2–0.8.36), KB-03 (0.8.28–0.8.34) — but each requires a code precondition absent from this file (custom `layout at` storage layout near the storage end, `viaIR`-compiled mutual recursion, or `transient` state variables respectively — see Non-findings). No KB entry is flagged as a live finding for this file.
+- **Part III (KB-01..KB-59):** version-gated by `introduced..fixed` against the floating pragma `^0.8.20` (effective range `>=0.8.20 <0.9.0`). Seven entries' version windows overlap that floating range — KB-01 (0.8.29–0.8.36), KB-02 (0.7.2–0.8.36), KB-03 (0.8.28–0.8.34), KB-04 (0.1.0–0.8.32), KB-05 (0.8.5–0.8.23), KB-06 (0.6.7–0.8.21), KB-07 (0.6.2–0.8.21). KB-01..03 were each ruled out on a code precondition absent from this file (custom `layout at` storage layout near the storage end, `viaIR`-compiled mutual recursion, or `transient` state variables respectively — see Non-findings); KB-04..07 overlap only the lower edge of the floating range (all fixed at or before 0.8.32) and were not individually walked. No KB entry is flagged as a live finding for this file.
 
 ---
 

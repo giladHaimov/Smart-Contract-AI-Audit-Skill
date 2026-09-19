@@ -95,3 +95,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** The `**` operator with an exponent type shorter than 256 bits used an uncleaned exponent, producing wrong results.
 - **Do / Detection:** Check solc >= 0.4.25; in new code verify exponentiation uses wide types for base and exponent.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2140`
+

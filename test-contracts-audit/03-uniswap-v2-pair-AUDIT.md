@@ -1,7 +1,7 @@
 # Audit Report — 03-uniswap-v2-pair.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/03-uniswap-v2-pair.sol`
-(Uniswap V2 core `UniswapV2Pair`, fetched verbatim from Uniswap/v2-core, `pragma solidity =0.5.16`, 202 lines)
+**Scope:** `test-contracts/03-uniswap-v2-pair.sol`
+(Uniswap V2 core `UniswapV2Pair`, fetched verbatim from Uniswap/v2-core, `pragma solidity =0.5.16`, 201 lines)
 
 **Not in scope / unverifiable:** the file only imports local sibling sources that are not present in this repo checkout — `./interfaces/IUniswapV2Pair.sol`, `./UniswapV2ERC20.sol`, `./libraries/Math.sol`, `./libraries/UQ112x112.sol`, `./interfaces/IERC20.sol`, `./interfaces/IUniswapV2Factory.sol`, `./interfaces/IUniswapV2Callee.sol`. Anything that depends on their internals (e.g. `SafeMath`'s exact revert behavior via `UniswapV2ERC20`, `Math.sqrt`/`Math.min` correctness, `UQ112x112.encode/uqdiv` fixed-point correctness, `_mint`/`_burn` from `UniswapV2ERC20`, the factory's `feeTo`/`createPair` logic) is noted as unverifiable rather than assumed safe or unsafe.
 
@@ -20,7 +20,7 @@
 | Informational | 1 |
 | **Total** | **4** |
 
-Scope: single file, 202 lines. Own reentrancy lock (`lock` modifier) correctly applied to all state-mutating external functions. One High finding (read-only reentrancy exposure via the un-locked `getReserves()` view during `swap()`'s external callback), one Low finding (unbounded low-level-call return-data copy in `_safeTransfer`), one Low finding (version-gated known compiler bug, KB-29, present at the pinned `0.5.16`), and one Informational finding documenting the well-known spot-price-as-oracle characteristic of AMM reserves for downstream integrators.
+Scope: single file, 201 lines. Own reentrancy lock (`lock` modifier) correctly applied to all state-mutating external functions. One High finding (read-only reentrancy exposure via the un-locked `getReserves()` view during `swap()`'s external callback), one Low finding (unbounded low-level-call return-data copy in `_safeTransfer`), one Low finding (version-gated known compiler bug, KB-29, present at the pinned `0.5.16`), and one Informational finding documenting the well-known spot-price-as-oracle characteristic of AMM reserves for downstream integrators.
 
 ---
 

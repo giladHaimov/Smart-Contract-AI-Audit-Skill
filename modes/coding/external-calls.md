@@ -124,3 +124,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Library functions threw when called from a call that received Ether.
 - **Do / Detection:** Check solc >= 0.4.2; legacy only.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2205`
+

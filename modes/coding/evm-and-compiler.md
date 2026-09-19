@@ -84,7 +84,7 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 ### KB-50: OptimizerStateKnowledgeNotResetForJumpdest — introduced 0.4.5, fixed 0.4.6 — Medium
 - **Don't:** Optimizer didn't reset internal state at jump destinations, potentially corrupting data.
 - **Do / Detection:** Check solc >= 0.4.6; legacy only.
-- Full entry: `Smart-contract-vulnerability-database_v1.md:2200`
+- Full entry: `Smart-contract-vulnerability-database_v1.md:2190`
 
 ### KB-52: OptimizerStaleKnowledgeAboutSHA3 — introduced before 0.4.x, fixed 0.4.3 — Medium
 - **Don't:** Optimizer's stale SHA3 knowledge caused some hashes (incl. storage variable positions) to be computed incorrectly.
@@ -105,3 +105,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Placeholder entry: compilers older than 0.3.0 may contain undocumented/undiscovered bugs.
 - **Do / Detection:** Never audit/deploy anything compiled with solc < 0.3.0 (practically: require >= 0.8.x for new contracts).
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2235`
+

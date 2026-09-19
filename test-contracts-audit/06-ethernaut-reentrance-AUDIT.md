@@ -1,6 +1,8 @@
 # Audit Report — 06-ethernaut-reentrance.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/06-ethernaut-reentrance.sol` (30 lines, 1 contract: `Reentrance`) — OpenZeppelin/Ethernaut "Reentrance" CTF level, fetched verbatim.
+**Scope:** `test-contracts/06-ethernaut-reentrance.sol` (30 lines, 1 contract: `Reentrance`) — OpenZeppelin/Ethernaut "Reentrance" CTF level, fetched verbatim.
+
+**Not in scope / unverifiable:** the file imports `openzeppelin-contracts-06/math/SafeMath.sol`, which is not present in this repo checkout. `SafeMath`'s revert behavior is treated as unverifiable rather than assumed safe or unsafe.
 
 **Compiler:** `pragma solidity ^0.6.12;` (floating within the 0.6.x line; since 0.6.12 was the final 0.6.x release, the effective compiled version is 0.6.12).
 

@@ -6,10 +6,14 @@ Short version: it's a Solidity vulnerability database — 293 known bug classes,
 
 I want to be upfront about something: this is not a linter, and I didn't try to make it one. Slither already does the mechanical pattern-matching well, and honestly the skill tells you to go run Slither in a bunch of places. What this is for is the stuff that isn't mechanically detectable — a reward function that's fine by itself but wrong the moment an admin calls a specific setter, an oracle read that's totally reasonable on mainnet but falls apart the second you're bridging across chains. That kind of thing needs someone (or something) to actually read the function, not just grep for `.call`.
 
+## In production
+
+This skill is the knowledge base behind a pre-audit review pipeline I run: the same database and audit workflow, executed by several models that cross-check each other's findings, with a human sanity-check on every report before it ships. The large-corpus evaluation below is the measured record of what that pipeline does — including where it falls short.
+
 ## Design and evaluation
 
 - [Design and prevention workflow: AI-Assisted Solidity Development](https://medium.com/@giladha/ai-assisted-solidity-development-bringing-audit-knowledge-into-the-dev-loop-a2089eae0212)
-- [Large-corpus evaluation: Stress-testing the auditor on ~230 contracts](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
+- [Large-corpus evaluation: Stress-testing the auditor on ~220 contracts](https://medium.com/@giladha/what-happened-when-we-stress-tested-an-ai-solidity-auditor-on-230-contracts-d45e0973e5fe)
 ## What's in the folder
 
 ```
@@ -69,11 +73,11 @@ Small confession here: this skill isn't wired into Claude Code's automatic disco
 So you just say the path.
 
 ```
-use the audit skill at /Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill to review this contract
+use the audit skill at <path-to>/Smart-Contract-AI-Audit-Skill to review this contract
 ```
 
 ```
-consult the coding-mode checklist at /Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill before you finish this withdraw function
+consult the coding-mode checklist at <path-to>/Smart-Contract-AI-Audit-Skill before you finish this withdraw function
 ```
 
 Works from any project, any session, no setup on the other end, because every internal reference in here is a relative path anchored to this folder — the entry point points at `modes/AUDIT_MODE.md`, that points at `../Smart-contract-vulnerability-database_v1.md`, and none of it cares what directory you were actually sitting in when you asked. I did set up the auto-discovery version at one point — symlinked it into `~/.claude/skills/` so it'd trigger globally — and then undid it, because saying the path once per conversation felt like a smaller cost than maintaining a symlink I'd forget existed. Your call if you want it back; it's a five-minute change.
@@ -82,13 +86,13 @@ Works from any project, any session, no setup on the other end, because every in
 
 Fair question, and the honest answer is: mostly it doesn't matter, but sometimes it really does.
 
-The full database is around 33-40k tokens. Every serious coding agent running in 2026 has at least a 128k window, most run 200k or more. So a single full read of the whole thing fits comfortably, with room left over — in the strictest sense none of the tiering below is *necessary*.
+The full database is around 45-50k tokens. Every serious coding agent running in 2026 has at least a 128k window, most run 200k or more. So a single full read of the whole thing fits comfortably, with room left over — in the strictest sense none of the tiering below is *necessary*.
 
 I built it anyway because two situations aren't hypothetical:
 
-Not everyone's running the big model with the big window. Cheaper pipelines, smaller local models, agents someone capped at 8-32k tokens to save money — those genuinely can't take a 40k-token read in one go, but they can work fine off the ~7k-token index plus one or two ~1-2k-token category files. The tiering is what makes the same skill usable on both ends of that range instead of only the expensive one.
+Not everyone's running the big model with the big window. Cheaper pipelines, smaller local models, agents someone capped at 8-32k tokens to save money — those genuinely can't take a ~47k-token read in one go, but they can work fine off the ~7k-token index plus one or two ~1-2k-token category files. The tiering is what makes the same skill usable on both ends of that range instead of only the expensive one.
 
-And even on a big model, a real audit session isn't just the database — it's the database plus the contract plus the running list of findings plus everything else in the conversation, all at once, for as long as the review takes. Rereading the same 40k tokens fresh for every one of ten contracts in a repo is wasteful even when it technically fits every time.
+And even on a big model, a real audit session isn't just the database — it's the database plus the contract plus the running list of findings plus everything else in the conversation, all at once, for as long as the review takes. Rereading the same ~47k tokens fresh for every one of ten contracts in a repo is wasteful even when it technically fits every time.
 
 This isn't me theorizing, either — it's the exact reason I ran the seven-contract validation as seven parallel agents instead of one long session. Each one's context stayed scoped to its own contract, and the whole thing finished in the time of roughly one audit instead of seven stacked end to end.
 
@@ -101,7 +105,7 @@ I didn't want to just trust my own design here, so I fetched seven real contract
 | WETH9 | production | 0 | 0 | 4 | 3 | 7 |
 | OpenZeppelin ERC20 (current) | production | 0 | 0 | 0 | 1 | 1 |
 | Uniswap V2 Pair | production | 0 | 1 | 0 | 2 (+1 info) | 4 |
-| SushiSwap MasterChef | production | 1 | 3 | 3 | 4 | 11 |
+| SushiSwap MasterChef | production | 1 | 3 | 3 | 3 | 10 |
 | not-so-smart-contracts Reentrancy | intentionally broken | 1 | 0 | 2 | 3 | 6 |
 | Ethernaut "Reentrance" | intentionally broken | 1 | 1 | 2 | 0 | 4 |
 | Ethernaut "Delegation" | intentionally broken | 1 | 0 | 0 | 2 | 3 |
@@ -159,4 +163,4 @@ The seven contracts used for the validation run came from `gnosis/canonical-weth
 
 ---
 
-Built and stress-tested in one sitting: assembled the database, split it into the two modes, ran it against seven real contracts to see if it actually holds up, and decided (deliberately, not by accident) to favor an explicit path over automatic discovery. If any of that changes later, this is the file to update first.
+Built in one sitting, stress-tested twice: assembled the database, split it into the two modes, ran it against seven real contracts to see if it actually holds up, then against 219 production contracts with a weak/strong/human pipeline plus a trap set. The numbers above are what came out. If any of that changes later, this is the file to update first.

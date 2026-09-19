@@ -53,3 +53,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** A contract defining both new-style `constructor()` and old-style same-named function had one silently ignored.
 - **Do / Detection:** Check solc >= 0.4.23; flag any function sharing the contract's name.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2150`
+

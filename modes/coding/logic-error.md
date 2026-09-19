@@ -145,3 +145,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** The `payable` modifier is only enforced on external entry points; an internal call from a payable function to a non-payable one succeeds while `msg.value` is still set, so value-accounting inside non-payable helpers can be silently wrong.
 - **Do / Detection:** Non-payable internal functions that read `msg.value` or handle funds; verify value flows only through explicitly payable paths.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:1439`
+

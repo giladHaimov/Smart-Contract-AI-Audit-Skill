@@ -37,3 +37,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** In StakingRewards-style contracts, if `rewardRate` is computed from `balanceOf(rewardToken)` including donations, or `notifyRewardAmount` can be frontrun/extended to dilute or spike rates, an attacker reshapes the emission schedule to their advantage.
 - **Do / Detection:** rewardRate derived from tracked internal balances, not raw `balanceOf`; who can call notify functions; leftover-rollover math (`rewardRate = (amount + leftover) / duration`) gamed by topping up mid-period; test notify → donate → notify sequences.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:697`
+

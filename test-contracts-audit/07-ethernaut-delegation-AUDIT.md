@@ -1,6 +1,6 @@
 # Audit Report — 07-ethernaut-delegation.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/07-ethernaut-delegation.sol` (31 lines, 2 contracts: `Delegate`, `Delegation`) — OpenZeppelin/Ethernaut "Delegation" CTF level, fetched verbatim.
+**Scope:** `test-contracts/07-ethernaut-delegation.sol` (31 lines, 2 contracts: `Delegate`, `Delegation`) — OpenZeppelin/Ethernaut "Delegation" CTF level, fetched verbatim.
 
 **Compiler:** `pragma solidity ^0.8.0;` (floating, no upper bound — resolves to any 0.8.x compiler ≥ 0.8.0 available to the build).
 

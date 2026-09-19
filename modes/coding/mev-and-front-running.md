@@ -79,3 +79,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Attacker fills consecutive blocks with high-gas-price transactions to prevent others' txs from being included before a deadline (the Fomo3D win).
 - **Do / Detection:** Contracts rewarding "last actor before time T" or requiring an action within a window; assess whether stuffing the required window is profitable vs the prize.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:983`
+

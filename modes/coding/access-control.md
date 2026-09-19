@@ -97,3 +97,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** A custom `transferFrom` that omits the owner/approved check lets anyone move any NFT — stealing staked or escrowed NFTs held by protocols using the custom implementation.
 - **Do / Detection:** In custom ERC721/ERC1155 code, verify `_isApprovedOrOwner` (or equivalent) on every transfer path including batch/operator variants; diff against OpenZeppelin reference; test transferring a token you don't own.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:223`
+

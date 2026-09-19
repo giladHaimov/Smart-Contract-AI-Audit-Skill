@@ -47,3 +47,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** `send` didn't provide gas to the recipient when zero Ether was transferred.
 - **Do / Detection:** Check solc >= 0.4.0; legacy only.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2210`
+

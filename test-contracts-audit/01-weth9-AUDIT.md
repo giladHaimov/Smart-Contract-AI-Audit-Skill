@@ -1,9 +1,9 @@
 # Audit Report — 01-weth9.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/01-weth9.sol`
+**Scope:** `test-contracts/01-weth9.sol`
 (WETH9 — canonical Wrapped Ether, fetched verbatim from https://github.com/gnosis/canonical-weth, GPL-3.0, `pragma solidity >=0.4.22 <0.6`)
 
-**Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening full entries for any candidate match. WETH9 is a ~60-line, 8+-year-battle-tested canonical contract securing tens of billions of dollars in production; the low finding count and absence of Critical/High findings reflects the actual state of the code, not a truncated pass.
+**Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening full entries for any candidate match. WETH9 is a 77-line, 8+-year-battle-tested canonical contract securing tens of billions of dollars in production; the low finding count and absence of Critical/High findings reflects the actual state of the code, not a truncated pass.
 
 ---
 

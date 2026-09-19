@@ -61,3 +61,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Upgradeable contracts add governance and migration risk: admin keys can swap logic maliciously, storage layouts can collide across versions, and uninitialized proxy logic contracts can be hijacked.
 - **Do / Detection:** Identify the upgrade admin (EOA vs multisig vs timelock); check `_disableInitializers` in constructor, storage gaps, `delegatecall` to admin-settable implementation, no slot reordering between versions.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:779`
+

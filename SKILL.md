@@ -38,13 +38,15 @@ modes/
 | DeFiVulnLabs (SunWeb3Sec) | https://github.com/SunWeb3Sec/DeFiVulnLabs | PoC-backed DeFi vulnerability catalog, Foundry-reproducible |
 | Official Solidity docs | https://docs.soliditylang.org | Known-compiler-bugs list (bugs.json) + official security considerations / EVM layout docs |
 
-- **Part I — V-001..V-197** (197): application-level vulnerabilities, 21 categories (Reentrancy, Access Control, Oracle, Math & Rounding, Accounting & Fees, Token Standards, DeFi Mechanics, Proxy & Upgradeability, DoS, MEV & Front-running, Signature & Replay, External Calls, Storage, Logic Error, Governance, Cross-Chain & Multichain, Other, plus the Part II/III categories below).
+- **Part I — V-001..V-197** (197): application-level vulnerabilities, 17 categories (Reentrancy, Access Control, Oracle, Math & Rounding, Accounting & Fees, Token Standards, DeFi Mechanics, Proxy & Upgradeability, DoS, MEV & Front-running, Signature & Replay, External Calls, Storage, Logic Error, Governance, Cross-Chain & Multichain, Other).
 - **Part II — E-01..E-37** (37): EVM/compiler/language-level pitfalls straight from the official docs.
 - **Part III — KB-01..KB-59** (59): official Solidity known compiler bugs, each with an `introduced X, fixed Y` version range.
 
 ## Losslessness guarantee
 
 `Smart-contract-vulnerability-database_v1.md` is the single source of truth and is never edited by either mode — only read. Everything else in this skill (`reference/INDEX.md`, `modes/coding/*.md`) is a **derived view**: INDEX.md is the same 293 rows with only the descriptive prose stripped out (title/severity/category/line survive); the per-category coding checklists reuse each entry's Description and Detection text verbatim, just relabeled Don't/Do, and link back to the exact line (`Smart-contract-vulnerability-database_v1.md:<line>`) for Aliases and Sources. If a derived file and the main database ever disagree, the main database wins — treat that as a bug in the derived file, not a reason to trust the summary.
+
+Reference integrity is mechanically verifiable: every line pointer in `reference/INDEX.md` and `modes/coding/*.md` must resolve inside its entry's span in the database. (All 586 pointers verified resolving at this commit.)
 
 Entry IDs (`V-`, `E-`, `KB-`) are stable identifiers — use them in audit findings and commit/PR references so they're traceable back to this database.
 

@@ -172,3 +172,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Access to array elements of <32-byte types didn't clean higher-order bits, corrupting sibling elements.
 - **Do / Detection:** Check solc >= 0.3.1; legacy only.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:2230`
+

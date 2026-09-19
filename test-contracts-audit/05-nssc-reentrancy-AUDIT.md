@@ -1,9 +1,9 @@
 # Audit Report — 05-nssc-reentrancy.sol
 
-**Scope:** `/Users/giladhaimov/dev/Smart-Contract-AI-Audit-Skill/test-contracts/05-nssc-reentrancy.sol`
+**Scope:** `test-contracts/05-nssc-reentrancy.sol`
 (crytic/not-so-smart-contracts, `re_entrancy/reentrance.sol`, educational deliberately-vulnerable contract, `pragma solidity ^0.4.15`)
 
-**Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening full entries for any candidate match. The file is a 42-line teaching contract containing one intentionally vulnerable function (`withdrawBalance`) and two intentionally corrected variants (`withdrawBalance_fixed`, `withdrawBalance_fixed_2`) for comparison.
+**Methodology:** Walked all 293 entries of `Smart-contract-vulnerability-database_v1.md` (Part I V-001..V-197, Part II E-01..E-37, Part III KB-01..KB-59) per `AUDIT_MODE.md`'s category order, cross-referencing `reference/INDEX.md` for triage and opening full entries for any candidate match. The file is a 43-line teaching contract containing one intentionally vulnerable function (`withdrawBalance`) and two intentionally corrected variants (`withdrawBalance_fixed`, `withdrawBalance_fixed_2`) for comparison.
 
 ---
 
@@ -17,7 +17,7 @@
 | Low | 3 |
 | **Total** | **6** |
 
-Scope: single file, 42 lines, `contract Reentrance`. One state-changing mapping (`userBalance`), three withdrawal-path functions, no access control, no proxy/oracle/governance/token-standard surface. The headline finding is the intentional classic reentrancy bug in `withdrawBalance` (V-001); the remaining findings are compiler-era hygiene issues consistent with the file's 2016-vintage `pragma solidity ^0.4.15`.
+Scope: single file, 43 lines, `contract Reentrance`. One state-changing mapping (`userBalance`), three withdrawal-path functions, no access control, no proxy/oracle/governance/token-standard surface. The headline finding is the intentional classic reentrancy bug in `withdrawBalance` (V-001); the remaining findings are compiler-era hygiene issues consistent with the file's 2016-vintage `pragma solidity ^0.4.15`.
 
 ---
 
@@ -127,7 +127,7 @@ Whole categories were not applicable to this file and are noted rather than forc
 - **External Calls (V-129..V-138) beyond V-135:** the `.call.value()()` return value is explicitly checked with `throw` on failure in both `withdrawBalance` and `withdrawBalance_fixed` (V-129 does not apply — return value is checked, just not before the state write); no `delegatecall`, no unauthenticated callbacks.
 - **Storage (V-139..V-150) beyond V-145:** no assembly, no manual slot manipulation, no uninitialized pointers, no struct/array deletion.
 - **Logic Error, Governance, Cross-Chain & Multichain (V-151..V-186):** no business-logic surface beyond the one balance ledger; no voting, no bridging.
-- **Part II (E-01..E-37):** E-02 (reentrancy, language-level view) is the same root cause as V-001 and is folded into that finding rather than double-reported; E-25 is folded into the V-135 finding for the same reason. No other Part II entry has a matching precondition in this 42-line file (no assembly, no storage packing, no delegatecall, no signature precompile use).
+- **Part II (E-01..E-37):** E-02 (reentrancy, language-level view) is the same root cause as V-001 and is folded into that finding rather than double-reported; E-25 is folded into the V-135 finding for the same reason. No other Part II entry has a matching precondition in this 43-line file (no assembly, no storage packing, no delegatecall, no signature precompile use).
 - **Part III (KB-01..KB-59):** version-gated against the floating pragma's resolvable range `0.4.15–0.4.26`. Several bug windows overlap that range (KB-17, KB-32, KB-33, KB-34, KB-40, KB-41, KB-43, KB-44, and the `0.4.x` variants of KB-35/36/37) — enumerated under the V-187 finding above rather than reported as eight-plus separate line items, since they share one root cause (floating into an old, unpinned compiler) and none of their triggering constructs (2D memory arrays, ABIEncoderV2, `exp`, event-emitting libraries, nested-array function-call decoding, raw function-selector arithmetic, constructors) are present anywhere in this file. KB-45 (`DelegateCallReturnValue`) was checked specifically since it's fixed exactly at `0.4.15` — the pragma's floor already has the fix, and the file uses no `delegatecall` regardless, so it is not flagged.
 
 ---

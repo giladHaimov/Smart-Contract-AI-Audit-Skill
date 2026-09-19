@@ -55,3 +55,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Historical: EIP-1283's reduced SSTORE gas metering (withdrawn) would have made `send()`/`transfer()`'s 2300-gas stipend sufficient for reentrant state writes. Lesson: gas-stipend assumptions are fork-fragile.
 - **Do / Detection:** Never rely on the 2300-gas stipend as a reentrancy defense; require CEI + reentrancy guards regardless of transfer method.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:93`
+

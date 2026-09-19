@@ -49,3 +49,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Cheap proposal creation, cancellation, or voting delays let attackers block governance throughput or repeatedly cancel others' proposals.
 - **Do / Detection:** Proposal thresholds, deposits, and cancellation rights.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:1505`
+

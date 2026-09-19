@@ -91,3 +91,4 @@ Real-time guardrails for this category. Consult while writing or editing Solidit
 - **Don't:** Tokens with a fallback function (e.g., WETH9) accept calls to functions they don't define without reverting; `SafeERC20.safePermit` on such a token succeeds as a no-op, and code assuming an allowance was set proceeds to pull zero funds.
 - **Do / Detection:** Any `permit` call where the token is user-selected; `token.code.length == 0` guards plus verifying allowance actually increased post-permit; flag flows combining `permit` + `transferFrom` without checking allowance.
 - Full entry: `Smart-contract-vulnerability-database_v1.md:647`
+
